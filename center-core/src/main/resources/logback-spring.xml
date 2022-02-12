@@ -9,11 +9,20 @@
     <!--文件日志格式-->
     <property name="FILE_LOG_PATTERN"
               value="%date{yyyy-MM-dd HH:mm:ss} [%-5level] %thread %file:%line %logger %msg%n" />
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%yellow(%date{yyyy-MM-dd HH:mm:ss}) %highlight([%-5level]) %green(%logger) %msg%n"/>
 
     <!--编码-->
     <property name="ENCODING"
               value="UTF-8" />
 
+    <!-- 控制台日志 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+    </appender>
     <!-- 滚动日志  -->
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--  要区别于其他的appender中的文件名字  当前次产生的日志-->
@@ -37,4 +46,10 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>
+
+    <!-- 日志记录器  name为执行哪个包下面的代码才记录日志-->
+    <logger name="com.itchenyang" level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ROLLING_FILE" />
+    </logger>
 </configuration>

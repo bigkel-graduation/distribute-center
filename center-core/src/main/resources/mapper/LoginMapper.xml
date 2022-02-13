@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itchenyang.mapper.LoginMapper">
+    <select id="getUserInformation" resultType="UserInformation">
+        select *
+        from t_user
+        where password = #{loginVO.password} and (phone = #{loginVO.username} or username = #{loginVO.username})
+    </select>
+
+    <select id="getRoleInfomation" resultType="UserRole">
+        select tp.name as province
+        <if test="cid != null">
+            ,tc.name as city
+        </if>
+        from t_province tp
+        <if test="cid != null">
+            LEFT JOIN t_city tc on tp.id = tc.pid
+        </if>
+        where tp.id = #{pid}
+        <if test="cid != null">
+            and tc.cid = #{cid}
+        </if>
+    </select>
+</mapper>

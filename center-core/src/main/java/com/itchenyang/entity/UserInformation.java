@@ -16,4 +16,5 @@ public class UserInformation {
     private UserRole userRole;
     private Boolean isDelete;
     private Boolean isLock;
+    private String token;
 }

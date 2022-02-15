@@ -4,7 +4,7 @@
     <select id="getUserInformation" resultType="UserInformation">
         select *
         from t_user
-        where password = #{loginVO.password} and (phone = #{loginVO.username} or username = #{loginVO.username})
+        where phone = #{loginVO.phone} or username = #{loginVO.phone}
     </select>
 
     <select id="getRoleInfomation" resultType="UserRole">

@@ -9,10 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public enum ResponseEnum {
 
-    SUCCESS(0,"成功"),
-    ERROR(-1,"失败"),
-
-    USER_NULL_ERROR(-601,"获取用户为空"),
+    SUCCESS(200,"成功"),
+    ERROR(-200,"失败"),
     //-1xx 服务器错误
     BAD_SQL_GRAMMAR_ERROR(-101, "sql语法错误"),
     SERVLET_ERROR(-102, "servlet请求异常"), //-2xx 参数校验
@@ -31,7 +29,7 @@ public enum ResponseEnum {
     LOGIN_AUTH_ERROR(-211, "未登录"),
     LOGIN_MOBILE_ERROR(-208, "用户不存在"),
     LOGIN_PASSWORD_ERROR(-209, "密码不正确"),
-    LOGIN_DISABLED_ERROR(-210, "用户已被禁用"),
+    LOGIN_DISABLED_ERROR(-210, "用户已被锁定"),
 
 
     USER_BIND_IDCARD_EXIST_ERROR(-301, "身份证号码已绑定"),

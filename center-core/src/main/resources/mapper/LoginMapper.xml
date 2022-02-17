@@ -4,7 +4,7 @@
     <select id="getUserInformation" resultType="UserInformation">
         select *
         from t_user
-        where phone = #{loginVO.phone} or username = #{loginVO.phone}
+        where (phone = #{loginVO.phone} or username = #{loginVO.phone}) and is_delete = 0
     </select>
 
     <select id="getRoleInfomation" resultType="UserRole">

@@ -30,13 +30,14 @@ CREATE table if not EXISTS t_user
     username VARCHAR(10) not null COMMENT "用户名",
     phone VARCHAR(12) not null COMMENT "电话号码",
     password VARCHAR(20) not null COMMENT "用户密码",
-    role VARCHAR(10) not null COMMENT "用户角色，总部=0、浙江杭州=1-1",
+    role_pid int not null default 0 COMMENT "用户角色",
+    role_cid int not null default 0 COMMENT "用户角色",
     is_delete TINYINT not null default 0,
     is_lock TINYINT not null default 0
     );
-insert into t_user (username, phone,password, role) VALUES ('admin', '66666666666','admin','0');
-insert into t_user (username, phone,password, role) VALUES ('zhejiang', '11111111111','zhejiang', '1');
-insert into t_user (username, phone,password, role) VALUES ('hangzhou', '22222222222','hangzhou', '1-1');
-insert into t_user (username, phone,password, role) VALUES ('hubei','33333333333', 'hubei', '2');
-insert into t_user (username, phone,password, role) VALUES ('wuhan', '44444444444','wuhan', '2-1');
+insert into t_user (username, phone,password, role_pid) VALUES ('admin', '66666666666','admin',0);
+insert into t_user (username, phone,password, role_pid) VALUES ('zhejiang', '11111111111','zhejiang', 1);
+insert into t_user (username, phone,password, role_pid, role_cid) VALUES ('hangzhou', '22222222222','hangzhou', 1,1);
+insert into t_user (username, phone,password, role_pid) VALUES ('hubei','33333333333', 'hubei', 2);
+insert into t_user (username, phone,password, role_pid, role_cid) VALUES ('wuhan', '44444444444','wuhan', 2,1);
 

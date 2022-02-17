@@ -9,6 +9,7 @@ import com.itchenyang.result.ResponseEnum;
 import com.itchenyang.service.LoginService;
 import com.itchenyang.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,17 +32,19 @@ public class LoginServiceImpl implements LoginService {
         Boolean isLock = userInformation.getIsLock();
         Assert.isFalse(isLock, ResponseEnum.LOGIN_DISABLED_ERROR);
         // 查找用户角色
-        String[] role = userInformation.getRole().split("-");
-        UserRole userRole;
-        if (role.length > 1) {
-            userRole = loginMapper.getRoleInfomation(new Integer(role[0]), new Integer(role[1]));
-            userInformation.setUserRole(userRole);
+        Integer pid = userInformation.getRolePid();
+        Integer cid = userInformation.getRoleCid();
+        UserRole userRole = loginMapper.getRoleInfomation(pid, cid);
+        String role;
+        if (userRole.getCity() == null || StringUtils.isBlank(userRole.getCity())) {
+            role = userRole.getProvince();
         }else {
-            userRole = loginMapper.getRoleInfomation(new Integer(role[0]),null);
-            userInformation.setUserRole(userRole);
+            role = userRole.getProvince() + "-" + userRole.getCity();
         }
+        userInformation.setUserRole(role);
         // 生成token，返回给前端
-        String token = JwtUtils.createToken(userInformation.getPhone(), userInformation.getUsername(), userInformation.getRole());
+        String role_num = pid + "-" + cid;
+        String token = JwtUtils.createToken(userInformation.getPhone(), userInformation.getUsername(), role_num);
         userInformation.setToken(token);
 
         return R.ok().playMessage("登录成功").playData("userInformation",userInformation);

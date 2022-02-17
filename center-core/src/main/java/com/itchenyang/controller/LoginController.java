@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-@Api(tags = "登录接口管理")
+@Api(tags = "用户登录管理")
 @RestController
 @RequestMapping("/api")
 @Slf4j

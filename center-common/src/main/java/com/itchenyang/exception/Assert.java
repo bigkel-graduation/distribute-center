@@ -1,7 +1,7 @@
 package com.itchenyang.exception;
 
 import com.itchenyang.result.ResponseEnum;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 断言，此处用来代替抛出异常
@@ -45,6 +45,12 @@ public class Assert {
 
     public static void notEmpty(String s,ResponseEnum responseEnum) {
         if (StringUtils.isEmpty(s)) {
+            throw new BusinessException(responseEnum);
+        }
+    }
+
+    public static void notBlank(String s,ResponseEnum responseEnum) {
+        if (StringUtils.isBlank(s)) {
             throw new BusinessException(responseEnum);
         }
     }

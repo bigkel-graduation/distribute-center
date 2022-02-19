@@ -9,15 +9,15 @@
 
     <select id="getRoleInfomation" resultType="UserRole">
         select tp.name as province
-        <if test="cid != null">
+        <if test="cid != 0">
             ,tc.name as city
         </if>
         from t_province tp
-        <if test="cid != null">
+        <if test="cid != 0">
             LEFT JOIN t_city tc on tp.id = tc.pid
         </if>
         where tp.id = #{pid}
-        <if test="cid != null">
+        <if test="cid != 0">
             and tc.cid = #{cid}
         </if>
     </select>

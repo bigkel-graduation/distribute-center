@@ -34,12 +34,16 @@ public class LoginServiceImpl implements LoginService {
         // 查找用户角色
         Integer pid = userInformation.getRolePid();
         Integer cid = userInformation.getRoleCid();
-        UserRole userRole = loginMapper.getRoleInfomation(pid, cid);
         String role;
-        if (userRole.getCity() == null || StringUtils.isBlank(userRole.getCity())) {
-            role = userRole.getProvince();
+        if (pid == 0 && cid == 0) {
+            role = "总部";
         }else {
-            role = userRole.getProvince() + "-" + userRole.getCity();
+            UserRole userRole = loginMapper.getRoleInfomation(pid, cid);
+            if (userRole.getCity() == null || StringUtils.isBlank(userRole.getCity())) {
+                role = userRole.getProvince();
+            }else {
+                role = userRole.getProvince() + "-" + userRole.getCity();
+            }
         }
         userInformation.setUserRole(role);
         // 生成token，返回给前端

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itchenyang.mapper.UserManageMapper">
-    <select id="getUserList" resultType="com.itchenyang.entity.UserInformation">
+    <select id="getUserListPage" resultType="com.itchenyang.entity.UserInformation">
         select id,username,phone,role_pid,role_cid,is_lock
         from t_user
         where is_delete = 0
@@ -11,6 +11,45 @@
         <if test="cid != 0">
             and role_cid &gt; 0
         </if>
+        <if test="query.key != null and query.key != ''">
+            and (username = #{query.key} or phone = #{query.key})
+        </if>
+        <if test="query.status != null">
+            and is_lock = #{query.status}
+        </if>
+        <if test="query.userRole != null">
+            and role_pid = #{s_pid} and role_cid = #{s_cid}
+        </if>
+        order by role_cid asc
         limit #{limit} offset #{offset}
     </select>
+
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(1)
+        from t_user
+        where is_delete = 0
+        <if test="pid != 0">
+            and role_pid = #{pid}
+        </if>
+        <if test="cid != 0">
+            and role_cid &gt; 0
+        </if>
+        <if test="query.key != null and query.key != ''">
+            and (username = #{query.key} or phone = #{query.key})
+        </if>
+        <if test="query.status != null">
+            and is_lock = #{query.status}
+        </if>
+        <if test="query.userRole != null">
+            and role_pid = #{s_pid} and role_cid = #{s_cid}
+        </if>
+    </select>
+
+    <delete id="deleteUser">
+        update t_user set is_delete = 1 where id = #{id}
+    </delete>
+
+    <update id="lockUserOrNot">
+        update t_user set is_lock = #{flag} where id = #{id}
+    </update>
 </mapper>

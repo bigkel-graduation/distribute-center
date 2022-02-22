@@ -1,10 +1,13 @@
 package com.itchenyang.service.impl;
 
+import com.itchenyang.entity.Province;
 import com.itchenyang.entity.UserInformation;
 import com.itchenyang.entity.UserRole;
 import com.itchenyang.entity.UserSearchQuery;
+import com.itchenyang.exception.Assert;
 import com.itchenyang.mapper.LoginMapper;
 import com.itchenyang.mapper.UserManageMapper;
+import com.itchenyang.result.ResponseEnum;
 import com.itchenyang.service.UserManageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -28,15 +31,8 @@ public class UserManageServiceImpl implements UserManageService {
         String[] split = role.split("-");
         int pid = Integer.parseInt(split[0]);
         int cid = Integer.parseInt(split[1]);
-        Integer s_pid = null;
-        Integer s_cid = null;
-        if (searchQuery.getUserRole() != null) {
-            String[] searchRole = searchQuery.getUserRole().split("-");
-            s_pid = Integer.parseInt(searchRole[0]);
-            s_cid = Integer.parseInt(searchRole[1]);
-        }
-        List<UserInformation> userLists = userManageMapper.getUserListPage(offset, limit, pid, cid, searchQuery, s_pid, s_cid);
-        Integer total = userManageMapper.getUserCount(offset, limit, pid, cid, searchQuery, s_pid, s_cid);
+        List<UserInformation> userLists = userManageMapper.getUserListPage(offset, limit, pid, cid, searchQuery);
+        Integer total = userManageMapper.getUserCount(offset, limit, pid, cid, searchQuery);
         addRole(userLists);
         Map<String, Object> map = new HashMap<>();
         map.put("total",total);
@@ -54,6 +50,16 @@ public class UserManageServiceImpl implements UserManageService {
         return userManageMapper.lockUserOrNot(id, flag);
     }
 
+    @Override
+    public Boolean updateOrInsertUser(UserInformation userInformation) {
+        return userManageMapper.updateOrInsertUser(userInformation);
+    }
+
+    @Override
+    public List<Province> getProvince(Integer pid, Integer cid) {
+        return userManageMapper.getProvince(pid, cid);
+    }
+
     public void addRole(List<UserInformation> userLists) {
         for (UserInformation userInformation : userLists) {
             // 查找用户角色
@@ -64,6 +70,7 @@ public class UserManageServiceImpl implements UserManageService {
                 role = "总部";
             }else {
                 UserRole userRole = loginMapper.getRoleInfomation(pid,cid);
+                Assert.notNull(userRole, ResponseEnum.ROLE_NOT_EXIST);
                 if (userRole.getCity() == null || StringUtils.isBlank(userRole.getCity())) {
                     role = userRole.getProvince();
                 }else {

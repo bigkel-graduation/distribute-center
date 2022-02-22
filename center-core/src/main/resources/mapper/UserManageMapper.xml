@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itchenyang.mapper.UserManageMapper">
     <select id="getUserListPage" resultType="com.itchenyang.entity.UserInformation">
-        select id,username,phone,role_pid,role_cid,is_lock
+        select id,username,password,phone,role_pid,role_cid,is_lock
         from t_user
         where is_delete = 0
         <if test="pid != 0">
@@ -16,9 +16,6 @@
         </if>
         <if test="query.status != null">
             and is_lock = #{query.status}
-        </if>
-        <if test="query.userRole != null">
-            and role_pid = #{s_pid} and role_cid = #{s_cid}
         </if>
         order by role_cid asc
         limit #{limit} offset #{offset}
@@ -40,9 +37,6 @@
         <if test="query.status != null">
             and is_lock = #{query.status}
         </if>
-        <if test="query.userRole != null">
-            and role_pid = #{s_pid} and role_cid = #{s_cid}
-        </if>
     </select>
 
     <delete id="deleteUser">
@@ -52,4 +46,45 @@
     <update id="lockUserOrNot">
         update t_user set is_lock = #{flag} where id = #{id}
     </update>
+
+    <insert id="updateOrInsertUser">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) as count from t_user where id = #{user.id}
+        </selectKey>
+        <if test="count > 0">
+            update t_user set username = #{user.username},
+                              phone = #{user.phone},
+                              password = #{user.password},
+                              role_pid = #{user.rolePid},
+                              role_cid = #{user.roleCid}
+            where id = #{user.id}
+        </if>
+        <if test="count == 0">
+            insert into t_user(username,phone,password,role_pid,role_cid)
+                   values(#{user.username},#{user.phone},#{user.password},#{user.rolePid},#{user.roleCid})
+        </if>
+    </insert>
+
+    <resultMap id="ProvinceToCity" type="Province">
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <collection property="cityList" javaType="List" ofType="City">
+            <result column="pid" property="pid"/>
+            <result column="cid" property="id"/>
+            <result column="cname" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="getProvince" resultMap="ProvinceToCity">
+        select tp.id as pid, tp.name as pname,
+               tc.cid as cid, tc.name as cname
+        from t_province as tp left join t_city as tc on tp.id = tc.pid
+        where 1 = 1
+        <if test="pid != 0 and cid == 0">
+            and tp.id = #{pid}
+        </if>
+        <if test="pid !=0 and cid != 0">
+            and tp.id = #{pid}
+        </if>
+    </select>
+
 </mapper>

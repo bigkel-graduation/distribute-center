@@ -1,5 +1,7 @@
 package com.itchenyang.controller;
 
+import com.itchenyang.entity.Province;
+import com.itchenyang.entity.UserInformation;
 import com.itchenyang.entity.UserSearchQuery;
 import com.itchenyang.exception.Assert;
 import com.itchenyang.result.R;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "用户信息管理")
@@ -61,5 +64,24 @@ public class UserManageController {
         Boolean result = userManageService.lockUserOrNot(id, flag);
         Assert.isTrue(result, ResponseEnum.ERROR);
         return R.ok();
+    }
+
+    @ApiOperation("新增或编辑用户信息")
+    @PutMapping("/user/update")
+    public R updateOrInsertUser(@ApiParam(value = "用户数据",required = true) @RequestBody UserInformation userInformation,
+                        HttpServletRequest request) {
+        String token = request.getHeader("X-token");
+        Assert.notBlank(token, ResponseEnum.LOGIN_AUTH_ERROR);
+        Boolean result = userManageService.updateOrInsertUser(userInformation);
+        Assert.isTrue(result, ResponseEnum.ERROR);
+        return R.ok();
+    }
+
+    @ApiOperation("获取省份信息")
+    @GetMapping("/user/province/{pid}/{cid}")
+    public R getProvince(@ApiParam(value = "用户角色pid", required = true) @PathVariable("pid") Integer pid,
+                         @ApiParam(value = "用户角色cid", required = true) @PathVariable("cid") Integer cid) {
+        List<Province> province = userManageService.getProvince(pid, cid);
+        return R.ok().playData("province", province);
     }
 }

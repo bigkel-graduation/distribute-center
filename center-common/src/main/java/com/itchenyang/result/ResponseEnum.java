@@ -16,7 +16,8 @@ public enum ResponseEnum {
     SERVLET_ERROR(-102, "servlet请求异常"), //-2xx 参数校验
     UPLOAD_ERROR(-103, "上传错误"),
     DOWNLOAD_ERROR(-1031,"下载错误"),
-    EXPORT_DATA_ERROR(104, "数据导出失败"),
+    EXPORT_DATA_ERROR(-104, "数据导出失败"),
+    ROLE_NOT_EXIST(-105, "角色不存在"),
 
     //-2xx 参数校验
     DELETE_ERROR(-201,"删除失败"),

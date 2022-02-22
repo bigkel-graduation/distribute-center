@@ -16,7 +16,7 @@ public class UserInformation {
     private Integer rolePid;
     private Integer roleCid;
     @ApiModelProperty(value = "角色")
-    private String userRole;
+    private String userRole;    // 具体的中文名  浙江-杭州
     private Boolean isDelete;
     private Boolean isLock;
     private String token;

@@ -12,7 +12,4 @@ public class UserSearchQuery {
 
     @ApiModelProperty(value = "用户状态")
     private Boolean status;
-
-    @ApiModelProperty(value = "角色")
-    private String userRole;
 }

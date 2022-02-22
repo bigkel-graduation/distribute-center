@@ -1,7 +1,10 @@
 package com.itchenyang.service;
 
+import com.itchenyang.entity.Province;
+import com.itchenyang.entity.UserInformation;
 import com.itchenyang.entity.UserSearchQuery;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserManageService {
@@ -10,4 +13,8 @@ public interface UserManageService {
     Boolean deleteUser(Integer id);
 
     Boolean lockUserOrNot(Integer id, Integer flag);
+
+    Boolean updateOrInsertUser(UserInformation userInformation);
+
+    List<Province> getProvince(Integer pid, Integer cid);
 }

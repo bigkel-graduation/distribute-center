@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itchenyang.mapper.RoleManageMapper">
+    <select id="getUserByRole" resultType="com.itchenyang.entity.UserInformation">
+        select
+               tu.id,
+               tu.username,
+               tu.phone,
+               tu.ip,
+               tu.role_pid,
+               tu.role_cid,
+               tu.description
+        from t_user as tu
+        where role_pid = #{pid} and role_cid = #{cid} and is_delete = 0
+    </select>
+
+    <update id="delUser">
+        update t_user set is_delete = 1 where id = #{id}
+    </update>
+
+    <resultMap id="ProvinceToCity" type="Province">
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <collection property="cityList" javaType="List" ofType="City">
+            <result column="pid" property="pid"/>
+            <result column="cid" property="id"/>
+            <result column="cname" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="canAddRole" resultMap="ProvinceToCity">
+        select tp.id as pid, tp.name as pname,
+               tc.cid as cid, tc.name as cname
+        from t_province as tp left join t_city as tc on tp.id = tc.pid
+        where tc.is_used = 0
+        <if test="pid != 0 and cid == 0">
+            and tp.id = #{pid}
+        </if>
+        <if test="pid !=0 and cid != 0">
+            and tp.id = #{pid}
+        </if>
+    </select>
+
+    <update id="addRole">
+        update
+        <if test="cid == 0">
+            t_province set is_used = 1 where id = #{pid}
+        </if>
+        <if test="cid != 0">
+            t_city set is_used = 1 where pid = #{pid} and cid = #{cid}
+        </if>
+    </update>
+
+    <select id="selectProvinceRole" resultType="java.lang.Integer">
+        select count(1) from t_province where id = #{pid} and is_used = 1
+    </select>
+
+    <update id="addProvince">
+        update t_province set is_used = 1 where id = #{pid}
+    </update>
+
+    <update id="addCity">
+        update t_city set is_used = 1 where pid = #{pid}
+    </update>
+
+    <update id="delUserByRole">
+        update t_user
+            set is_delete = 1
+        where role_pid = #{pid}
+          <if test="cid != 0">
+              and role_cid = #{cid}
+          </if>
+    </update>
+
+    <update id="delCityRole">
+        update t_city
+            set is_used = 0
+        where pid = #{pid}
+          <if test="cid != 0">
+              and cid = #{cid}
+          </if>
+    </update>
+
+    <update id="delProvinceRole">
+        update t_province
+            set is_used = 0
+        where id = #{pid}
+    </update>
+</mapper>

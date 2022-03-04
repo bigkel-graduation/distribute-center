@@ -30,7 +30,8 @@ public enum ResponseEnum {
     LOGIN_MOBILE_ERROR(-208, "用户不存在"),
     LOGIN_PASSWORD_ERROR(-209, "密码不正确"),
     LOGIN_DISABLED_ERROR(-210, "用户已被锁定"),
-    LOGIN_AUTH_ERROR(-211, "未登录");
+    LOGIN_AUTH_ERROR(-211, "未登录"),
+    INSERT_ERROR(-212, "新增失败");
 
 
     private Integer code;

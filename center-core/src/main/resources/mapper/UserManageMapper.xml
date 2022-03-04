@@ -78,7 +78,7 @@
         select tp.id as pid, tp.name as pname,
                tc.cid as cid, tc.name as cname
         from t_province as tp left join t_city as tc on tp.id = tc.pid
-        where 1 = 1
+        where tp.is_used = 1 and tc.is_used = 1
         <if test="pid != 0 and cid == 0">
             and tp.id = #{pid}
         </if>

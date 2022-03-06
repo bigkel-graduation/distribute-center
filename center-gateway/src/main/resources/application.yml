@@ -1,0 +1,21 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: center-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true       # 开启利用微服务名进行路由功能
+      routes:
+        - id: payment_routh2
+          uri: lb://user-request
+          predicates:
+              - Path=/buy/**
+    nacos:
+      discovery:
+        namespace: bigkel
+        server-addr: localhost:8848
+

@@ -6,6 +6,7 @@
     <modules>
         <module>center-common</module>
         <module>center-core</module>
+        <module>center-gateway</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

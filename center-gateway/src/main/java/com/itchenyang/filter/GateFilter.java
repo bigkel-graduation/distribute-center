@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -48,16 +49,15 @@ public class GateFilter implements GlobalFilter, Ordered {
             // 将请求模块的path转换成具体信息的实体类
             List<ModelMessage> modelLists = new ArrayList<>();
             if (!StringUtils.isEmpty(path)) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat();
-                dateFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String[] model = path.split("/");
                 ModelMessage modelMessage = new ModelMessage();
                 modelMessage.setModelType(model[2]);
                 modelMessage.setModelName(model[3]);
-                modelMessage.setRequestTime(dateFormat.format(new Date()));
+                modelMessage.setRequestTime(new Date());
+                modelMessage.setShowTime(dateFormat.format(new Date()));
                 modelLists.add(modelMessage);
             }
-
             final String INDEX = env.getProperty("model");
             if (findIndex(INDEX)) {
                 // 往es中写入值
@@ -102,12 +102,12 @@ public class GateFilter implements GlobalFilter, Ordered {
             BulkRequest bulkRequest = new BulkRequest();
             for (ModelMessage modelList : modelLists) {
                 bulkRequest.add(new IndexRequest(INDEX)
-                        .id(modelList.getIndexId())
+                        .id(UUID.randomUUID().toString())     // 文档名称
                         .source(JSON.toJSONString(modelList), XContentType.JSON));
             }
             BulkResponse response = client.bulk(bulkRequest, RequestOptions.DEFAULT);
             if (response.hasFailures()) {
-                log.info("写入es失败!");
+                log.info("写入es失败: {}", response.getItems()[0].getFailureMessage());
             }else {
                 log.info("写入es成功!");
             }

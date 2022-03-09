@@ -2,14 +2,13 @@ package com.itchenyang.entity;
 
 import lombok.Data;
 
-import java.util.UUID;
+import java.util.Date;
 
 @Data
 public class ModelMessage {
 
-    private Integer id;
-    private String indexId = UUID.randomUUID().toString();
     private String modelName;
     private String modelType;
-    private String requestTime;
+    private Date requestTime;
+    private String showTime;    // 存放requestTime的展示格式时间 2022-02-04 20:00:00
 }

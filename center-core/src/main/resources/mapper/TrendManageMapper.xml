@@ -13,14 +13,23 @@
         </if>
     </select>
 
-    <insert id="insertTrendCount" parameterType="Map">
+    <insert id="insertTypeTrendCount" parameterType="Map">
         INSERT INTO t_model_type (`type`,`count_trend`)
         VALUES
         <foreach collection="maps" item="map" separator=",">
-            (#{type},#{count_trend}
+            (#{map.type},#{map.count_trend})
         </foreach>
         ON DUPLICATE KEY
-        UPDATE `type` = VALUES(type),
-        `count_trend` = VALUES(count_trend)
+        UPDATE count_trend = VALUES(count_trend)
+    </insert>
+
+    <insert id="insertNameTrendCount" parameterType="Map">
+        INSERT INTO t_model_name (`name`,`type`,`count_trend`)
+        VALUES
+        <foreach collection="maps" item="map" separator=",">
+            (#{map.name},#{map.type},#{map.count_trend})
+        </foreach>
+        ON DUPLICATE KEY
+        UPDATE count_trend = VALUES(count_trend)
     </insert>
 </mapper>

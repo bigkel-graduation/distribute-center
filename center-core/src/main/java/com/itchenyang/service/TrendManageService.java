@@ -6,5 +6,7 @@ import java.util.Map;
 public interface TrendManageService {
     String getTrendCount(String modelName, String modelType, String table);
 
-    Boolean insertTrendCount(List<Map<String, String>> maps);
+    Boolean insertTypeTrendCount(List<Map<String, String>> maps);
+
+    Boolean insertNameTrendCount(List<Map<String, String>> newTrend);
 }

@@ -12,5 +12,7 @@ public interface TrendManageMapper {
                          @Param("modelType") String modelType,
                          @Param("table") String table);
 
-    Boolean insertTrendCount(@Param("maps") List<Map<String, String>> maps);
+    Boolean insertTypeTrendCount(@Param("maps") List<Map<String, String>> maps);
+
+    Boolean insertNameTrendCount(@Param("maps") List<Map<String, String>> maps);
 }

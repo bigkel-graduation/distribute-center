@@ -55,7 +55,42 @@ public class ModelHandler {
             }
             return maps;
         } catch (Exception e) {
-            log.info("查询es异常: {}", e.getMessage());
+            log.info("服务类型统计查询es异常: {}", e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Map<String, String>> getCountByModelName(long startTime, long endTime) {
+        TermsAggregationBuilder aggregation = AggregationBuilders.terms("modelTypeCount")
+                .field("modelType.keyword")
+                .subAggregation(AggregationBuilders.terms("modelNameCount")
+                        .field("modelName.keyword"));
+        try {
+            SearchRequest request = new SearchRequest()
+                    .indices(env.getProperty("model"))
+                    .source(new SearchSourceBuilder()
+                            .size(0)
+                            .query(QueryBuilders.rangeQuery("requestTime")
+                                    .timeZone("+08:00")
+                                    .gte(startTime)
+                                    .lt(endTime))
+                            .aggregation(aggregation));
+            SearchResponse searchResponse = client.search(request, RequestOptions.DEFAULT);
+            Terms modelTypeCount = searchResponse.getAggregations().get("modelTypeCount");
+            List<Map<String, String>> maps = new ArrayList<>();
+            for (Terms.Bucket TypeBucket : modelTypeCount.getBuckets()) {
+                Terms modelNameCount = TypeBucket.getAggregations().get("modelNameCount");
+                for (Terms.Bucket NameBucket : modelNameCount.getBuckets()) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("type", TypeBucket.getKeyAsString());
+                    map.put("name", NameBucket.getKeyAsString());
+                    map.put("count", NameBucket.getDocCount() + "");
+                    maps.add(map);
+                }
+            }
+            return maps;
+        } catch (Exception e) {
+            log.info("服务名称统计查询es异常: {}", e.getMessage());
             return new ArrayList<>();
         }
     }

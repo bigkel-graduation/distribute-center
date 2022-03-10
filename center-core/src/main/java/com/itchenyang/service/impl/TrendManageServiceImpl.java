@@ -19,7 +19,12 @@ public class TrendManageServiceImpl implements TrendManageService {
     }
 
     @Override
-    public Boolean insertTrendCount(List<Map<String, String>> maps) {
-        return trendManageMapper.insertTrendCount(maps);
+    public Boolean insertTypeTrendCount(List<Map<String, String>> maps) {
+        return trendManageMapper.insertTypeTrendCount(maps);
+    }
+
+    @Override
+    public Boolean insertNameTrendCount(List<Map<String, String>> maps) {
+        return trendManageMapper.insertNameTrendCount(maps);
     }
 }

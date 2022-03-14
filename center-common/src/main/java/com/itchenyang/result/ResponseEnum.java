@@ -18,6 +18,7 @@ public enum ResponseEnum {
     DOWNLOAD_ERROR(-1031,"下载错误"),
     EXPORT_DATA_ERROR(-104, "数据导出失败"),
     ROLE_NOT_EXIST(-105, "角色不存在"),
+    FLAG_NOT_EXIST(-106, "请输入正确的标识"),
 
     //-2xx 参数校验
     DELETE_ERROR(-201,"删除失败"),

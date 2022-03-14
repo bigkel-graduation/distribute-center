@@ -32,4 +32,59 @@
         ON DUPLICATE KEY
         UPDATE count_trend = VALUES(count_trend)
     </insert>
+
+    <select id="getTrendByType" resultType="ModelTrendEntity">
+        select id,
+           `type` as modelType,
+           `count_trend`
+        from `t_model_type`
+    </select>
+
+    <select id="getModelName" resultType="String">
+        select `name` from t_model_name
+    </select>
+
+    <select id="getTrendByName" resultType="ModelTrendEntity">
+        select id,
+            `name` as modelName,
+           `type` as modelType,
+           `count_trend`
+        from `t_model_name`
+        where `name` = #{key}
+    </select>
+
+    <select id="getModelTypeByName" resultType="String">
+        select `type` from `t_model_name` where `name` = #{key}
+    </select>
+
+    <select id="getTrendByNameCompare" resultType="ModelTrendEntity">
+        select id,
+           `name` as modelName,
+           `type` as modelType,
+           `count_trend`
+        from `t_model_name`
+        where `type` = #{type}
+    </select>
+
+    <resultMap id="casList" type="modelType">
+        <id column="typeId" property="id"/>
+        <result column="type" property="name"/>
+        <collection property="childList" javaType="List" ofType="modelName">
+            <result column="nameId" property="id"/>
+            <result column="cname" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="getCasList" resultMap="casList">
+        select mt.id as typeId,
+               mt.type as type,
+               mn.id as nameId,
+               mn.name as cname
+        from t_model_type as mt
+            left join t_model_name as mn
+            on mt.type = mn.type
+    </select>
+
+    <select id="getModel" resultType="String">
+        select `name` from t_model_name where id = #{key}
+    </select>
 </mapper>

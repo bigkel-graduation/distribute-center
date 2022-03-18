@@ -10,4 +10,8 @@ public interface LoginMapper {
     UserInformation getUserInformation(@Param("loginVO") UserInformation loginVO);
 
     UserRole getRoleInfomation(@Param("pid") Integer pid, @Param("cid") Integer cid);
+
+    Boolean updateIpAddress(@Param("user") UserInformation userInformation);
+
+    String getAddress(@Param("ip") String ip);
 }

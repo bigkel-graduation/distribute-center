@@ -12,7 +12,11 @@ public class CenterCoreApplication {
     private static final Logger LOG = LoggerFactory.getLogger(CenterCoreApplication.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(CenterCoreApplication.class, args);
+        try {
+            SpringApplication.run(CenterCoreApplication.class, args);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+        }
         LOG.info("distribute center core application started!");
     }
 }

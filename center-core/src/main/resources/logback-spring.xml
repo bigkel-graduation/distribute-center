@@ -38,7 +38,7 @@
             <!-- 日志归档路径以及格式 先一次产生的日志-->
             <fileNamePattern>${log.path}/main-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--归档日志文件保留的最大数量-->
-            <maxHistory>15</maxHistory>
+            <maxHistory>7</maxHistory>
 
             <!-- 达到多大容量后滚动 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -48,7 +48,7 @@
     </appender>
 
     <!-- 日志记录器  name为执行哪个包下面的代码才记录日志-->
-    <logger name="com.itchenyang" level="INFO">
+    <logger name="com.itchenyang" level="ALL">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLING_FILE" />
     </logger>

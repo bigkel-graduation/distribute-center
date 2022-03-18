@@ -21,4 +21,14 @@
             and tc.cid = #{cid}
         </if>
     </select>
+
+    <update id="updateIpAddress">
+        update `t_user`
+        set `from_address` = #{user.fromAddress},`to_address` = #{user.toAddress}
+        where id = #{user.id}
+    </update>
+
+    <select id="getAddress" resultType="String">
+        select address from `t_address` where ip = #{ip}
+    </select>
 </mapper>

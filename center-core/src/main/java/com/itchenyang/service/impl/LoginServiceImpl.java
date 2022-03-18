@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -31,6 +32,15 @@ public class LoginServiceImpl implements LoginService {
         // 判断用户是否被锁定
         Boolean isLock = userInformation.getIsLock();
         Assert.isFalse(isLock, ResponseEnum.LOGIN_DISABLED_ERROR);
+        // 设置用户登录地址
+        String ip = "10.50.2." + (new Random().nextInt(36) + 1);
+        log.info("用户登录ip为:{}",ip);
+        String address = loginMapper.getAddress(ip);
+        log.info("此ip对应的地址为:{}",address);
+        userInformation.setFromAddress(userInformation.getToAddress());
+        userInformation.setToAddress(address);
+        Boolean flag = loginMapper.updateIpAddress(userInformation);
+        Assert.isTrue(flag, ResponseEnum.IP_ERROR);
         // 查找用户角色
         Integer pid = userInformation.getRolePid();
         Integer cid = userInformation.getRoleCid();

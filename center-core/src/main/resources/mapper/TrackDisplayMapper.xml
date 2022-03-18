@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itchenyang.mapper.TrackDisplayMapper">
+    <select id="getUserDisplay" resultType="Map">
+        select
+            `to_address` as name, COUNT(1) as value
+        from
+            `t_user`
+        GROUP BY `to_address`
+    </select>
+
+    <select id="getUserTrack" resultType="Map">
+        select
+            `from_address` as `from`,
+            `to_address` as `to`,
+            1 as `value`
+        from
+            `t_user`
+    </select>
+</mapper>

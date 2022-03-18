@@ -12,7 +12,8 @@ public class UserInformation {
     private String username;
     private String phone;
     private String password;
-    private String ip;
+    private String fromAddress;   // 上一次登录地址
+    private String toAddress;     // 现在登录地址
     private Integer rolePid;
     private Integer roleCid;
     private String userRole;    // 具体的中文名  浙江-杭州

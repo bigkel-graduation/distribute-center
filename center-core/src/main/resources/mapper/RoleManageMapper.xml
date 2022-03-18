@@ -6,7 +6,8 @@
                tu.id,
                tu.username,
                tu.phone,
-               tu.ip,
+               tu.from_address,
+               tu.to_address,
                tu.role_pid,
                tu.role_cid,
                tu.description

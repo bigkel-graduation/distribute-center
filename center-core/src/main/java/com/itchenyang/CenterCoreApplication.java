@@ -14,9 +14,9 @@ public class CenterCoreApplication {
     public static void main(String[] args) {
         try {
             SpringApplication.run(CenterCoreApplication.class, args);
+            LOG.info("distribute center core application started!");
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }
-        LOG.info("distribute center core application started!");
     }
 }

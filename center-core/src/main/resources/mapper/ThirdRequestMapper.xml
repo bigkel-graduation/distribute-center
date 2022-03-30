@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itchenyang.mapper.ThirdRequestMapper">
+    <insert id="saveRequestMessage">
+        insert into
+            `t_request`(`username`,`phone`,`role_pid`,`role_cid`)
+        values
+            (#{userInfo.username},
+             #{userInfo.phone},
+             #{userInfo.rolePid},
+             #{userInfo.roleCid});
+    </insert>
+
+    <select id="getNotDealCount" resultType="Integer">
+        select count(1) from `t_request` where `stats` = 0
+    </select>
+
+    <select id="getMessageList" resultType="MessageInformation">
+        select id,username, phone, role_pid, role_cid, `create_time`, `action`, `stats`
+        from `t_request`
+        where 1 = 1
+        <if test="query.key != null and query.key != ''">
+            and (username = #{query.key} or phone = #{query.key})
+        </if>
+        <if test="query.status != null">
+            and stats = #{query.status}
+        </if>
+        order by `create_time` asc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getMessageCount" resultType="Integer">
+        select count(1)
+        from `t_request`
+        where 1 = 1
+        <if test="query.key != null and query.key != ''">
+            and (username = #{query.key} or phone = #{query.key})
+        </if>
+        <if test="query.status != null">
+            and stats = #{query.status}
+        </if>
+    </select>
+
+    <update id="dealRequestMessage">
+        update `t_request`
+        set `stats` = 1,
+            `action` = #{flag}
+        where id = #{id}
+    </update>
+
+    <select id="getMsgInfo" resultType="MessageInformation">
+        select * from `t_request` where id = #{id}
+    </select>
+
+    <delete id="delMessage">
+        delete from `t_request` where id = #{id}
+    </delete>
+</mapper>

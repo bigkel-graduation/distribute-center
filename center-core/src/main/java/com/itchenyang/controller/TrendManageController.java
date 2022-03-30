@@ -8,6 +8,7 @@ import com.itchenyang.result.ResponseEnum;
 import com.itchenyang.service.TrendManageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,8 @@ public class TrendManageController {
 
     @ApiOperation("服务名称趋势查询接口")
     @GetMapping("/trend/name")
-    public R getTrendByName(@RequestParam(value = "key", required = false) String key,
+    public R getTrendByName(@ApiParam(value = "检索关键字")
+                            @RequestParam(value = "key", required = false) String key,
                             HttpServletRequest request) {
         String token = request.getHeader("X-token");
         Assert.notBlank(token, ResponseEnum.LOGIN_AUTH_ERROR);
@@ -57,8 +59,9 @@ public class TrendManageController {
 
     @ApiOperation("同一类型服务趋势查询接口")
     @GetMapping("/trend/name/compare")
-    public R getTrendByNameCompare(@RequestParam(value = "key", required = false) String key,
-                            HttpServletRequest request) {
+    public R getTrendByNameCompare(@ApiParam(value = "检索关键字")
+                                   @RequestParam(value = "key", required = false) String key,
+                                   HttpServletRequest request) {
         String token = request.getHeader("X-token");
         Assert.notBlank(token, ResponseEnum.LOGIN_AUTH_ERROR);
 
@@ -87,7 +90,8 @@ public class TrendManageController {
 
     @ApiOperation("根据级联查询趋势接口")
     @GetMapping("/trend/casda/{flag}")
-    public R getTrendByCas(@PathVariable("flag") String flag) {
+    public R getTrendByCas(@ApiParam(value = "flag")
+                           @PathVariable("flag") String flag) {
         // 根据flag查询对应的服务名称
         String modelName = trendManageService.getModel(Integer.parseInt(flag));
         return R.ok().playData("modelName",modelName);
